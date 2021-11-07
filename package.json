@@ -1,0 +1,23 @@
+{
+  "name": "scrapper",
+  "version": "1.0.0",
+  "description": "Small app to scrappe data",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rsacramento18/scrapper.git"
+  },
+  "author": "Ricardo Sacramento",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rsacramento18/scrapper/issues"
+  },
+  "homepage": "https://github.com/rsacramento18/scrapper#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "puppeteer": "^11.0.0"
+  }
+}
