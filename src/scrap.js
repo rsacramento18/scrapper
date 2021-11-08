@@ -4,11 +4,19 @@ getPricesFromJumbo = async (obj) => {
   let prices = [];
 
   for (x of obj.items) {
+    obj.xpaths.image = x.image;
     const scrapes = await scrappeWeb(x.url, obj.xpaths)
+
+    let price = scrapes.price.replace(/^\s+|\s+$/g, '');
+    price = Math.abs(price.substring(0, price.indexOf('€') - 1).replace(',','.'));
+
+    let priceUnit = scrapes.priceUnit.replace(/^\s+|\s+$/g, '');
+    priceUnit = Math.abs(priceUnit.substring(0, priceUnit.indexOf('€') - 1));
+
     prices.push({
       name: x.name,
-      price: scrapes.price,
-      priceUnit: scrapes.priceUnit,
+      price: price,
+      priceUnit: priceUnit,
       image: scrapes.image,
     });
   }
@@ -20,13 +28,15 @@ getPricesFromPingoDoce = async (obj) => {
   let prices = [];
 
   for (x of obj.items) {
+    obj.xpaths.image = x.image;
     const scrapes = await scrappeWeb(x.url, obj.xpaths)
-    const priceUnit = Math.abs(scrapes.price.substring(0, scrapes.price.indexOf('€')))/x.qty;
+    const price = Math.abs(scrapes.price.replace(/^\s+|\s+$/g, '').substring(0, scrapes.price.indexOf('€')).replace(',', '.'));
+    const priceUnit = Math.round((price/x.qty) * 100) / 100;
 
     prices.push({
       name: x.name,
-      price: scrapes.price,
-      priceUnit: priceUnit + '€',
+      price: price,
+      priceUnit: priceUnit,
       image: scrapes.image,
     });
   }
@@ -39,11 +49,19 @@ getPricesFromContinente = async (obj) => {
   let prices = [];
 
   for (x of obj.items) {
+    obj.xpaths.image = x.image;
     const scrapes = await scrappeWeb(x.url, obj.xpaths)
+    let price = scrapes.price.replace(/^\s+|\s+$/g, '');
+    price = Math.abs(price.substring(1, price.length).replace(',','.'));
+
+    let priceUnit = scrapes.priceUnit.replace(/^\s+|\s+$/g, '');
+    priceUnit = Math.abs(priceUnit.substring(1, priceUnit.length).replace(',','.'));
+
+
     prices.push({
       name: x.name,
-      price: scrapes.price,
-      priceUnit: scrapes.priceUnit,
+      price: price,
+      priceUnit: priceUnit,
       image: scrapes.image,
     });
   }
@@ -61,19 +79,21 @@ scrappeWeb = async(url, xpaths) => {
   console.log(xpaths);
 
   if(xpaths.price) {
-    const price = await page.$x(xpaths.price);
-    console.log(price);
-    scraps.price = price.getAttribute('innerHTML');
+    const [priceObj] = await page.$x(xpaths.price);
+    const price = await priceObj.getProperty('textContent');
+    scraps.price = await price.jsonValue();
   }
 
   if(xpaths.priceUnit) {
-    const priceUnit = await page.$x(xpaths.priceUnit);
-    scraps.priceUnit = priceUnit.getAttribute('innerHTML');
+    const [priceUnitObj] = await page.$x(xpaths.priceUnit);
+    const priceUnit = await priceUnitObj.getProperty('textContent');
+    scraps.priceUnit = await priceUnit.jsonValue();
   }
 
   if(xpaths.image) {
-    const image = await page.$x(xpaths.image);
-    scraps.image = image.getAttribute('src');
+    const [imageObj] = await page.$x(xpaths.image);
+    const image = await imageObj.getProperty('src');
+    scraps.image = await image.jsonValue();
   }
 
   await browser.close();
