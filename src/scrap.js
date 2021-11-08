@@ -1,38 +1,88 @@
 const puppeteer = require('puppeteer');
 
-getPricesFromJumbo =  async (url, xpath) => {
+getPricesFromJumbo = async (obj) => {
+  let prices = [];
 
-  let price = scrappeWeb(url, xpath);
-  price = price.split(' ');
+  for (x of obj.items) {
+    const scrapes = await scrappeWeb(x.url, obj.xpaths)
+    prices.push({
+      name: x.name,
+      price: scrapes.price,
+      priceUnit: scrapes.priceUnit,
+      image: scrapes.image,
+    });
+  }
 
-  return price[0];
+  return prices;
 };
 
-getPricesFromPingoDoce =  async (url, xpath) => {
+getPricesFromPingoDoce = async (obj) => {
+  let prices = [];
+
+  for (x of obj.items) {
+    const scrapes = await scrappeWeb(x.url, obj.xpaths)
+    const priceUnit = Math.abs(scrapes.price.substring(0, scrapes.price.indexOf('€')))/x.qty;
+
+    prices.push({
+      name: x.name,
+      price: scrapes.price,
+      priceUnit: priceUnit + '€',
+      image: scrapes.image,
+    });
+  }
+
+  return prices;
+};
+
+getPricesFromContinente = async (obj) => {
+
+  let prices = [];
+
+  for (x of obj.items) {
+    const scrapes = await scrappeWeb(x.url, obj.xpaths)
+    prices.push({
+      name: x.name,
+      price: scrapes.price,
+      priceUnit: scrapes.priceUnit,
+      image: scrapes.image,
+    });
+  }
+
+  return prices;
+};
+
+scrappeWeb = async(url, xpaths) => {
+  let scraps = {};
 
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
   await page.goto(url);
 
-  const [el] = page.$x('//*[@id="maincontent"]/div[2]/div[1]/div[2]/div/div[5]/div/span');
+  console.log(xpaths);
 
-  let price = await el.getPropperty('innerHTML');
-  price = price.split(' ');
+  if(xpaths.price) {
+    const price = await page.$x(xpaths.price);
+    console.log(price);
+    scraps.price = price.getAttribute('innerHTML');
+  }
 
-  return price[0];
-};
+  if(xpaths.priceUnit) {
+    const priceUnit = await page.$x(xpaths.priceUnit);
+    scraps.priceUnit = priceUnit.getAttribute('innerHTML');
+  }
 
-scrappeWeb = async(url, xpath) => {
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
-  await page.goto(url);
+  if(xpaths.image) {
+    const image = await page.$x(xpaths.image);
+    scraps.image = image.getAttribute('src');
+  }
 
-  const [el] = page.$x('//*[@id="maincontent"]/div[2]/div[1]/div[2]/div/div[5]/div/span');
+  await browser.close();
 
-  let price = await el.getPropperty('innerHTML');
-  return price;
+  return scraps;
 }
 
 module.exports = {
   getPricesFromJumbo,
+  getPricesFromPingoDoce,
+  getPricesFromContinente,
 }
