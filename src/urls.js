@@ -35,8 +35,8 @@ const pingoDoce = {
 
 const continente = {
   xpaths: {
-    priceUnit: '//*[@id="maincontent"]/div/div/div[2]/div[2]/div[1]/div[3]/div[3]/div[1]/div/div/div[2]/span[1]',
-    price: '//*[@id="maincontent"]/div/div/div[2]/div[2]/div[1]/div[3]/div[3]/div[1]/div/div/div[1]/span[1]/span/span[1]',
+    priceUnit: '//*[@id="maincontent"]/div/div/div[2]/div[2]/div[1]/div[4]/div[3]/div[1]/div/div/div[2]/span[1]',
+    price: '//*[@id="maincontent"]/div/div/div[2]/div[2]/div[1]/div[4]/div[3]/div[1]/div/div/div[1]/span/span/span[1]',
   },
   items: [
     {
