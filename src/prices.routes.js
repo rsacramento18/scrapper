@@ -3,12 +3,14 @@ const urls = require('./urls');
 
 module.exports = (app) => {
   app.get("/getprices", ( async (req, res) => {
-    const prices = {
-      jumbo: await scrapper.getPricesFromJumbo(urls.jumbo),
-      pingoDoce: await scrapper.getPricesFromPingoDoce(urls.pingoDoce),
-      continente: await scrapper.getPricesFromContinente(urls.continente),
-    }
+    const prices = [];
 
-    res.send(prices);
+    prices.push( await scrapper.getPricesFromJumbo(urls.jumbo));
+    prices.push( await scrapper.getPricesFromPingoDoce(urls.pingoDoce));
+    prices.push( await scrapper.getPricesFromContinente(urls.continente));
+
+    const merged = [].concat.apply([], prices);
+    
+    res.send(merged);
   }));
 }

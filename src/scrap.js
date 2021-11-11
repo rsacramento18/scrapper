@@ -15,6 +15,7 @@ getPricesFromJumbo = async (obj) => {
 
     prices.push({
       name: x.name,
+      supermarket: 'Jumbo',
       price: price,
       priceUnit: priceUnit,
       image: scrapes.image,
@@ -35,6 +36,7 @@ getPricesFromPingoDoce = async (obj) => {
 
     prices.push({
       name: x.name,
+      supermarket: 'Pingo Doce',
       price: price,
       priceUnit: priceUnit,
       image: scrapes.image,
@@ -60,6 +62,7 @@ getPricesFromContinente = async (obj) => {
 
     prices.push({
       name: x.name,
+      supermarket: 'Continente',
       price: price,
       priceUnit: priceUnit,
       image: scrapes.image,
@@ -72,33 +75,41 @@ getPricesFromContinente = async (obj) => {
 scrappeWeb = async(url, xpaths) => {
   let scraps = {};
 
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
-  await page.goto(url);
+  try {
 
-  console.log(xpaths);
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    await page.goto(url);
 
-  if(xpaths.price) {
-    const [priceObj] = await page.$x(xpaths.price);
-    const price = await priceObj.getProperty('textContent');
-    scraps.price = await price.jsonValue();
+    console.log(url);
+    console.log(xpaths);
+
+    if(xpaths.price) {
+      const [priceObj] = await page.$x(xpaths.price);
+      const price = await priceObj.getProperty('textContent');
+      scraps.price = await price.jsonValue();
+    }
+
+    if(xpaths.priceUnit) {
+      const [priceUnitObj] = await page.$x(xpaths.priceUnit);
+      const priceUnit = await priceUnitObj.getProperty('textContent');
+      scraps.priceUnit = await priceUnit.jsonValue();
+    }
+
+    if(xpaths.image) {
+      const [imageObj] = await page.$x(xpaths.image);
+      const image = await imageObj.getProperty('src');
+      scraps.image = await image.jsonValue();
+    }
+  
+
+    await browser.close();
+
+    return scraps;
   }
-
-  if(xpaths.priceUnit) {
-    const [priceUnitObj] = await page.$x(xpaths.priceUnit);
-    const priceUnit = await priceUnitObj.getProperty('textContent');
-    scraps.priceUnit = await priceUnit.jsonValue();
+  catch (e) {
+    console.error(e);
   }
-
-  if(xpaths.image) {
-    const [imageObj] = await page.$x(xpaths.image);
-    const image = await imageObj.getProperty('src');
-    scraps.image = await image.jsonValue();
-  }
-
-  await browser.close();
-
-  return scraps;
 }
 
 module.exports = {
