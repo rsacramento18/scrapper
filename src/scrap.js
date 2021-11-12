@@ -1,20 +1,25 @@
 const puppeteer = require('puppeteer');
 
-scrapDiapers = async (arr) => {
+const scrapDiapers = async (arr) => {
   let diapers = [];
-  console.log(arr);
-  arr.forEach(async (item) =>  {
-    const scrap = await scrappeWeb(item);
 
-    if(item.supermarket = 'jumbo') diapers.push(processDataJumbo(scrap));
-    if(item.supermarket = 'pingoDoce') diapers.push(processDataPingoDoce(scrap));
-    if(item.supermarket = 'continente') diapers.push(processDataContinente(scrap));
-  });
- return diapers;
+  for (let item in arr) {
 
+  // arr.forEach(async (item) =>  {
+    const scrap = await scrappeWeb(arr[item]);
+
+    if(arr[item].supermarket === 'jumbo') diapers.push(processDataJumbo(scrap, arr[item]));
+    if(arr[item].supermarket === 'pingoDoce') diapers.push(processDataPingoDoce(scrap, arr[item]));
+    if(arr[item].supermarket === 'continente') diapers.push(processDataContinente(scrap, arr[item]));
+
+    // if(item >= arr.length - 1) {
+    // }
+  }
+
+  return diapers;
 }
 
-processDataJumbo = async (scrap) => {
+const processDataJumbo = (scrap, item) => {
 
   let price;
   let priceUnit;
@@ -30,8 +35,8 @@ processDataJumbo = async (scrap) => {
   }
 
   return {
-    name: scrap.name,
-    supermarket: scrap.supermarket,
+    name: item.name,
+    supermarket: item.supermarket,
     price: price ? price : 0,
     priceUnit: priceUnit ? priceUnit : 0,
     image: scrap.image,
@@ -39,7 +44,7 @@ processDataJumbo = async (scrap) => {
 
 };
 
-processDataPingoDoce = async (scrap) => {
+const processDataPingoDoce = (scrap, item) => {
 
   let price;
   let priceUnit;
@@ -50,8 +55,8 @@ processDataPingoDoce = async (scrap) => {
   }
 
   return {
-    name: scrap.name,
-    supermarket: 'Pingo Doce',
+    name: item.name,
+    supermarket: item.supermarket,
     price: price ? price : 0,
     priceUnit: priceUnit ? priceUnit : 0,
     image: scrap.image,
@@ -59,7 +64,9 @@ processDataPingoDoce = async (scrap) => {
 
 };
 
-processDataContinente = async (scrap) => {
+const processDataContinente = (scrap, item) => {
+  let price;
+  let priceUnit;
 
   if(scrap.price){
     price = scrap.price.replace(/^\s+|\s+$/g, '');
@@ -72,17 +79,16 @@ processDataContinente = async (scrap) => {
   }
 
   return {
-    name: scrap.name,
-    supermarket: 'Continente',
+    name: item.name,
+    supermarket: item.supermarket,
     price: price ? price : 0,
     priceUnit: priceUnit ? priceUnit : 0,
     image: scrap.image,
   };
 };
 
-scrappeWeb = async(item) => {
+const scrappeWeb = async(item) => {
   let scraps = {};
-
 
   try {
 
