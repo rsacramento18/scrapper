@@ -17,6 +17,15 @@ const diapers = [
       priceUnit: '//*[@id="maincontent"]/div[2]/div[1]/div[2]/div/div[5]/div/span',
       price: '//*[@id="maincontent"]/div[2]/div[1]/div[2]/div/div[7]/div/div/div/span/span/span',
     },
+    { 
+      supermarket: 'jumbo',
+      name: 'Fraldas Chico Ulra T1 Soft 27 un',
+      url: 'https://www.auchan.pt/pt/beleza-higiene-e-bebe/fraldas-e-toalhitas-de-bebe/fraldas-t0-t2-recem-nascido-6-kg/fraldas-chicco-ultra-t1-soft-27un/2961790.html',
+      image: '//*[@id="pdpCarousel-2961790"]/div/div/img',
+      qty: 27,
+      priceUnit: '//*[@id="maincontent"]/div[2]/div[1]/div[2]/div/div[5]/div/span',
+      price: '//*[@id="maincontent"]/div[2]/div[1]/div[2]/div/div[7]/div/div/div/span/span/span',
+    },
     {
       supermarket: 'pingoDoce',
       name: 'Extra Care PingoDoce Cuida Bebe',
