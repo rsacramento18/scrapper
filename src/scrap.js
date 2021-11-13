@@ -51,7 +51,7 @@ const processDataPingoDoce = (scrap, item) => {
 
   if( scrap.price ) {
     price = Math.abs(scrap.price.replace(/^\s+|\s+$/g, '').substring(0, scrap.price.indexOf('€')).replace(',', '.'));
-    priceUnit = Math.round((price/scrap.qty) * 100) / 100;
+    priceUnit = Math.round((price/item.qty) * 100) / 100;
   }
 
   return {
@@ -114,6 +114,7 @@ const scrappeWeb = async(item) => {
 
     if(item.image) {
       const [imageObj] = await page.$x(item.image);
+      console.log(imageObj);
       if (imageObj) {
         const image = await imageObj.getProperty('src');
         scraps.image = await image.jsonValue();
