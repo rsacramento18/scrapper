@@ -37,10 +37,10 @@ const diapers = [
     {
       supermarket: 'continente',
       name: 'Dodot Sensitive 80',
-      url:  'https://www.continente.pt/produto/fraldas-sensitive-t1-dodot-7375114.html',
+      url:  'https://www.continente.pt/produto/fraldas-sensitive-2-5kg-t1-dodot-7375114.html',
       image: '//*[@id="slick-slide00"]/img',
-      priceUnit: '//*[@id="maincontent"]/div/div/div[2]/div[2]/div[1]/div[4]/div[3]/div[1]/div/div/div[2]/span[1]',
-      price: '//*[@id="maincontent"]/div/div/div[2]/div[2]/div[1]/div[4]/div[3]/div[1]/div/div/div[1]/span/span/span[1]',
+      priceUnit: '//*[@id="maincontent"]/div/div/div[2]/div[2]/div[1]/div[3]/div[3]/div[1]/div/div/div[2]/span[1]',
+      price: '//*[@id="maincontent"]/div/div/div[2]/div[2]/div[1]/div[3]/div[3]/div[1]/div/div/div[1]/span[1]/span/span[1]',
     },
     {
       supermarket: 'continente',
